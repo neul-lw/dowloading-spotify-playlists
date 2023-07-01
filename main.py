@@ -12,6 +12,10 @@ playlists = listdir("./spotify_playlists/")
 select_song = input("Do you want to select all the songs, or download the first choiece? y/n: ")
 while select_song != "y" and select_song != "n":
     select_song = input("Do you want to select all the songs, or download the first choiece? y/n: ")
+print("Some songs won't have the same titles in youtube, so ytmdl asks you a title for a song if that happens. If you have too much songs, it might takes too much time to select all the songs that don't have same titles.")
+select_title = input("So do you want to select a title for a song when that happens? y/n: ")
+while select_title != "y" and select_title != "n":
+    select_title = input("So do you want to select a title for a song when that happens? y/n: ")
 
 for playlist in playlists:
     with open(f"./spotify_playlists/{playlist}", newline='') as csvf:
@@ -24,6 +28,13 @@ for playlist in playlists:
             song_name = row["Track Name"]
             track_id = row["Track URI"]
             if select_song == "y":
-                result = subprocess.run(["ytmdl", f"{artist} {song_name}", "--spotify-id", f"{track_id}", "-o", f"{album_name}"])
+                if select_title == y:
+                    result = subprocess.run(["ytmdl", f"{artist} {song_name}", "--spotify-id", f"{track_id}", "-o", f"{album_name}"])
+                else:
+                    result = subprocess.run(["ytmdl", f"{artist} {song_name}", "--spotify-id", f"{track_id}", "-o", f"{album_name}", "--keep-chapter-name"])
             else:
-                result = subprocess.run(["ytmdl", f"{artist} {song_name}", "--spotify-id", f"{track_id}", "-q", "-o", f"{album_name}"])
+                if select_title == y:
+                    result = subprocess.run(["ytmdl", f"{artist} {song_name}", "--spotify-id", f"{track_id}", "-o", f"{album_name}"])
+                else:
+                    result = subprocess.run(["ytmdl", f"{artist} {song_name}", "--spotify-id", f"{track_id}", "-o", f"{album_name}", "--keep-chapter-name"])
+                result = subprocess.run(["ytmdl", f"{artist} {song_name}", "--spotify-id", f"{track_id}", "-q", "-o", f"{album_name}", "--keep-chapter-name"])
